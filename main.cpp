@@ -1,3 +1,7 @@
+//
+// Created by El Wisman, w0497862, on 3/26/2025.
+//
+
 #include <iostream>
 #include <chrono>
 #include <thread>
@@ -6,7 +10,6 @@
 //#include "
 
 
-//this is a test for git
 using namespace std;
 
 void ClearScreen()
