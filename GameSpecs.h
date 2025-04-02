@@ -29,8 +29,6 @@ const int HUMAN_COLOR = 3; // turquoise
 const int ZOMBIE_COLOR = 14; // bright yellow
 const int DASH_COLOR = 8; // pale white
 
-enum class Direction { NORTH, EAST, SOUTH, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST };
-
 constexpr std::pair<int, int> directionOffsets[] = {
     {-1, 0}, // NORTH
     {0, 1},  // EAST

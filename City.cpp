@@ -31,7 +31,7 @@ City::City() {
         cout << human << " Humans on the board, looking to place one at " << row << "," << col << endl;
         if (grid[row][col] == nullptr ) {
             cout << "there was space" << endl;
-            grid[row][col] = new Human(this, GRIDSIZE);
+            grid[row][col] = new Human(this, GRIDSIZE, row, col);
             human++;
             cout << "Human has been placed" << endl;
         }
@@ -44,7 +44,7 @@ City::City() {
         cout << human << " Zombies on the board, looking to place one at " << row << "," << col << endl;
         if (grid[row][col] == nullptr ) {
             cout << "there was space" << endl;
-            grid[row][col] = new Zombie(this, GRIDSIZE);
+            grid[row][col] = new Zombie(this, GRIDSIZE, row, col);
             human++;
             cout << "Zombie has been placed" << endl;
         }
@@ -71,7 +71,16 @@ void City::setOrganism( Organism *organism, int x, int y ) {
 
 //step/turn/dothing function
 void City::step() {
+    for (int row=0; row < GRIDSIZE; row++) {
+        for (int col=0; col < GRIDSIZE; col++) {
+            if (grid[row][col] != nullptr) { // check if something exists BEFORE pulling an organism
+                Organism *organism = getOrganism(row, col);
+                //cout << organism->getType() << " is checking...."<< endl;
+                organism->turn();
+            }
+        }
 
+    }
 }
 
 //reset the turn bool function
@@ -81,6 +90,7 @@ void City::reset() {
             if (grid[row][col] != nullptr) { // check if something exists BEFORE pulling an organism
                 Organism *organism = getOrganism(row, col);
                 organism->changeMoveState();
+                //cout << "a creature got its flag changed" << endl;
             }
         }
 

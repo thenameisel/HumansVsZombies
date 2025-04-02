@@ -26,8 +26,10 @@ int main() {
 
     //testing loop, runs set number of times
 
-    for (int i=0; i < 1; i++) {
+    for (int i=0; i < 10; i++) {
         ClearScreen();
+        city->step();
+        city->reset();
         cout << *city << endl;
         cout << "HUMANS: " << city->countType(HUMAN_CH) << endl;
         cout << "ZOMBIES: " << city->countType(ZOMBIE_CH) << endl;

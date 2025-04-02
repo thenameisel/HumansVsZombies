@@ -3,18 +3,26 @@
 //
 
 #include "Organism.h"
+
+#include "City.h"
 using namespace std;
 
 Organism::Organism() {
 
 }
 
-Organism::Organism(City *city, int size) {
+Organism::Organism(City *city, int inSize, int row, int col) {
     moved = true; //everything starts existence having moved.
+    this->city = city;
+    size = inSize;
+    x = row;
+    y = col;
 }
 
 void Organism::changeMoveState() {
-    moved = !moved;
+    //cout << x << "/" << y << " move flip started as " << moved << endl;
+    moved = false;
+    //cout << x << "/" << y << " move flip ended as " << moved << endl;
 }
 char Organism::getType() {
     return type;
