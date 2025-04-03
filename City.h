@@ -12,23 +12,28 @@ class City
 {
 protected:
 	Organism *grid[GRIDSIZE][GRIDSIZE];
-	int generation;
+	int generation = 0;
 
 public:
 	City();
 	virtual ~City();
 
 	Organism *getOrganism( int x, int y );
-
 	void setOrganism( Organism *organism, int x, int y );
+	void removeOrganism(int x, int y);
 
 	void step(); //includes all actions except reset, counting, and printing in this solution.
 	void reset();
+
 	int countType(char);
+	int getGeneration();
+
+	bool hasDiversity();
+
 	friend ostream& operator<<( ostream &output, City &city );
 	
 	void col(int c);   //for colors
-	void debugPrint(); //for debugging, simple print of the grid
+
 };
 
 #endif

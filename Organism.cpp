@@ -20,10 +20,9 @@ Organism::Organism(City *city, int inSize, int row, int col) {
 }
 
 void Organism::changeMoveState() {
-    //cout << x << "/" << y << " move flip started as " << moved << endl;
     moved = false;
-    //cout << x << "/" << y << " move flip ended as " << moved << endl;
 }
+
 char Organism::getType() {
     return type;
 }

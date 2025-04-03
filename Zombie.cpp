@@ -10,6 +10,8 @@
 #include <random>
 #include <algorithm>
 
+#include "Human.h"
+
 using namespace std;
 //default constructor
 Zombie::Zombie() : Organism() {
@@ -18,19 +20,17 @@ Zombie::Zombie() : Organism() {
 //parm constructor
 Zombie::Zombie(City *city, int size, int row, int col) : Organism(city, size, row, col) {
     type = ZOMBIE_CH;
+    cout << "Zombie created!" << endl;
 }
-
-// Zombie::~Zombie() {
-//     if (this != nullptr) {delete this;}
-// }
 
 void Zombie::turn() {
     if (!moved) {
         //Move
         this->move();
-        //Recruit
-
+        //Bite
+        this->bite();
         //Starve
+        this->starve();
     }
 }
 
@@ -42,13 +42,11 @@ vector<pair<int, int>> Zombie::findSpaces() {
         int nextY = directionOffsets[direct].second + y;
 
         if (nextX < 0 || nextX >= size || nextY < 0 || nextY >= size) {
-            //cout << "Zombie::move() was out of bounds" << endl;
-            //cout << "x: " << x << ", y: " << y << " Size: "<< size << endl;
+
             continue;
         }
         //if passed gate if continue:
         Organism *adjacentCell = city->getOrganism(nextX, nextY);
-        //cout << "Cell contents fetched" << endl;
         if (adjacentCell == nullptr) {
             emptySpaces.push_back( pair(nextX, nextY) );
         }
@@ -56,20 +54,76 @@ vector<pair<int, int>> Zombie::findSpaces() {
     return emptySpaces;
 }
 
+vector<pair<int, int>> Zombie::findFood() {
+    vector<pair<int, int>> foodSpaces;
+    for (int direct = 0; direct < 8; direct++) {
+        int nextX = directionOffsets[direct].first + x;
+        int nextY = directionOffsets[direct].second + y;
+
+        if (nextX < 0 || nextX >= size || nextY < 0 || nextY >= size) {
+            continue;
+        }
+
+        //if passed gate if continue:
+        Organism *adjacentCell = city->getOrganism(nextX, nextY);
+        if (adjacentCell != nullptr && adjacentCell->getType() != ZOMBIE_CH) {
+            foodSpaces.push_back( pair(nextX, nextY) );
+        }
+    }
+    return foodSpaces;
+}
+
 void Zombie::move() {
     random_device rd;
     mt19937 gen(rd());
     vector<pair<int, int>> emptySpaces = findSpaces();
+    vector<pair<int, int>> foodSpaces = findFood();
 
-    if (!emptySpaces.empty()) {
+    if (!foodSpaces.empty()) {
+        shuffle(foodSpaces.begin(), foodSpaces.end(), gen);
+        city->removeOrganism(foodSpaces[0].first, foodSpaces[0].second);
+        city->setOrganism(this, foodSpaces[0].first, foodSpaces[0].second);
+        city->setOrganism(nullptr, x ,y);
+        x = foodSpaces[0].first;
+        y = foodSpaces[0].second;
+        hasEaten = true;
+        starveTimer = 0;
+    } else if (!emptySpaces.empty()) {
         shuffle(emptySpaces.begin(), emptySpaces.end(), gen);
-        //cout << "Zombie is moving from " << x << ", " << y << " to " << emptySpaces[0].first << ", " << emptySpaces[0].second << endl;
         city->setOrganism(this, emptySpaces[0].first, emptySpaces[0].second);
         city->setOrganism(nullptr, x, y);
         x = emptySpaces[0].first;
         y = emptySpaces[0].second;
-
+        starveTimer++;
+    }  else {
+        starveTimer++;
     }
-    //cout << "Zombie move complete, turning state to off" << endl;
     this->moved = true;
+}
+
+void Zombie::bite() {
+    random_device rd;
+    mt19937 gen(rd());
+    biteTimer++;
+
+    if (biteTimer >= ZOMBIE_BREED && hasEaten) {
+        vector<pair<int, int>> foodSpaces = findFood();
+
+        if (!foodSpaces.empty()) {
+            shuffle(foodSpaces.begin(), foodSpaces.end(), gen);
+            city->removeOrganism(foodSpaces[0].first, foodSpaces[0].second);
+            Organism *newZombie = new Zombie(city, size,foodSpaces[0].first, foodSpaces[0].second);
+            city->setOrganism(newZombie, foodSpaces[0].first, foodSpaces[0].second);
+
+            biteTimer = 0;
+            hasEaten = false;
+        }
+    }
+}
+void Zombie::starve() {
+    if (starveTimer >= ZOMBIE_STARVE) {
+        Organism *newHuman = new Human(city, size, x, y);
+        city->setOrganism(newHuman, x, y);
+        delete this;
+    }
 }

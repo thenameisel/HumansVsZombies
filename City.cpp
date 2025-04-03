@@ -5,6 +5,12 @@
 
 #include <memory>
 #include <random>
+#include <iostream>
+#define NOMINMAX
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#undef byte
+#include <conio.h>
 
 #include "Human.h"
 #include "Organism.h"
@@ -28,12 +34,9 @@ City::City() {
     for (int human = 0; human < HUMAN_STARTCOUNT;) {
         int row = rd() % GRIDSIZE;
         int col = rd() % GRIDSIZE;
-        cout << human << " Humans on the board, looking to place one at " << row << "," << col << endl;
         if (grid[row][col] == nullptr ) {
-            cout << "there was space" << endl;
             grid[row][col] = new Human(this, GRIDSIZE, row, col);
             human++;
-            cout << "Human has been placed" << endl;
         }
     }
 
@@ -41,12 +44,9 @@ City::City() {
     for (int human = 0; human < ZOMBIE_STARTCOUNT;) {
         int row = rd() % GRIDSIZE;
         int col = rd() % GRIDSIZE;
-        cout << human << " Zombies on the board, looking to place one at " << row << "," << col << endl;
         if (grid[row][col] == nullptr ) {
-            cout << "there was space" << endl;
             grid[row][col] = new Zombie(this, GRIDSIZE, row, col);
             human++;
-            cout << "Zombie has been placed" << endl;
         }
     }
 
@@ -59,6 +59,29 @@ City::~City() {
     }
 }
 
+int City::getGeneration() {
+    return generation;
+}
+
+bool City::hasDiversity() {
+    bool hasHumans = false;
+    bool hasZombies = false;
+
+    for (int row = 0; row < GRIDSIZE; row++) {
+        for (int col = 0; col < GRIDSIZE; col++) {
+            if (grid[row][col] != nullptr) {
+                Organism *organism = getOrganism(row, col);
+                char orgType = organism->getType();
+                if (orgType == HUMAN_CH) {hasHumans = true;}
+                else if (orgType == ZOMBIE_CH) {hasZombies = true;}
+            }
+
+        }
+    }
+
+    return hasHumans && hasZombies;
+}
+
 //get Organism from the grid
 Organism *City::getOrganism( int x, int y ) {
     return grid[x][y];
@@ -69,13 +92,29 @@ void City::setOrganism( Organism *organism, int x, int y ) {
     grid[x][y] = organism;
 }
 
+//delete Organism from the grid
+void City::removeOrganism( int x, int y ) {
+    for (int i = 0; i < GRIDSIZE; i++) {
+        for (int j = 0; j < GRIDSIZE; j++) {
+            if ((i != x || j != y) && grid[i][j] == grid[x][y]) {
+                cout << "ERROR: Duplicate pointer at (" << i << "," << j << ")" << endl;
+                return; // Don't delete - object exists elsewhere
+            }
+        }
+    }
+    if (grid[x][y] != nullptr) {
+        delete grid[x][y];
+        grid[x][y] = nullptr;
+    }
+}
+
 //step/turn/dothing function
 void City::step() {
+    generation++;
     for (int row=0; row < GRIDSIZE; row++) {
         for (int col=0; col < GRIDSIZE; col++) {
             if (grid[row][col] != nullptr) { // check if something exists BEFORE pulling an organism
                 Organism *organism = getOrganism(row, col);
-                //cout << organism->getType() << " is checking...."<< endl;
                 organism->turn();
             }
         }
@@ -85,15 +124,14 @@ void City::step() {
 
 //reset the turn bool function
 void City::reset() {
+
     for (int row=0; row < GRIDSIZE; row++) {
         for (int col=0; col < GRIDSIZE; col++) {
             if (grid[row][col] != nullptr) { // check if something exists BEFORE pulling an organism
                 Organism *organism = getOrganism(row, col);
                 organism->changeMoveState();
-                //cout << "a creature got its flag changed" << endl;
             }
         }
-
     }
 }
 
@@ -111,36 +149,35 @@ int City::countType(char type) {
     return count;
 }
 
-
-//Simple print for debugging
-void City::debugPrint() {
-    for (int row = 0; row < GRIDSIZE; row++) {
-        for (int col = 0; col < GRIDSIZE; col++) {
-            if (grid[row][col] != nullptr) {
-                Organism *currentOrg = this->getOrganism(row, col);
-                if (currentOrg != nullptr) {
-                    char currentType = currentOrg->getType();
-                    cout << currentType;
-                } else {
-                    cout << "?";
-                }
-            } else { cout << "-";}
-        }
-        cout << endl;
-    }
-}
+void setColor(int colorId);
+void resetColor();
 
 //friend function for <<
 ostream& operator<<( ostream &output, City &city ) {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO originalInfo;
+    GetConsoleScreenBufferInfo(hConsole, &originalInfo);
+
     for (int row=0; row < GRIDSIZE; row++) {
         for (int col=0; col < GRIDSIZE; col++) {
             if (city.grid[row][col] != nullptr) {
                 Organism *currentOrg = city.getOrganism(row, col);
                 char currentType = currentOrg->getType();
+                if (currentType == ZOMBIE_CH) {
+                    SetConsoleTextAttribute(hConsole, ZOMBIE_COLOR);
+                } else if (currentType == HUMAN_CH) {
+                    SetConsoleTextAttribute(hConsole, HUMAN_COLOR);
+                }
                 output << currentType;
-            } else {output << '-';}
+                SetConsoleTextAttribute(hConsole, originalInfo.wAttributes);
+            } else {
+                SetConsoleTextAttribute(hConsole, DASH_COLOR);
+                output << '-';
+                SetConsoleTextAttribute(hConsole, originalInfo.wAttributes);
+            }
         }
         output << endl;
     }
+    SetConsoleTextAttribute(hConsole, originalInfo.wAttributes);
     return output;
 }

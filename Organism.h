@@ -21,7 +21,8 @@ protected:
 public:
 	Organism();
 	Organism( City *city, int size, int row, int col);
-	//virtual ~Organism();
+	//virtual string getColoredSymbol() const = 0;
+	virtual ~Organism() = default;
 	virtual void turn() = 0;
 	virtual vector<pair<int, int>> findSpaces() =0;
 	void changeMoveState(); //moved is protected, need a way to access it

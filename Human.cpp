@@ -22,29 +22,19 @@ Human::Human(City *city, int size, int row, int col) : Organism(city, size, row,
     cout << "Human created!" << endl;
 }
 
-// Human::~Human() {
-//     if (this != nullptr) delete this;
-// }
-
 void Human::turn() {
     //if it hasn't moved, then do the actions
     if (!moved) {
-        //cout << "Human hasnt moved, and gets to" << endl;
         //Move
         this->move();
         //Recruit
         this->recruit();
     }
-    // else {
-    //     cout << "Human has moved, and stays still" << endl;
-    // }
 }
 
 //helper function to find empty spaces
 vector<pair<int, int>> Human::findSpaces() {
     vector<pair<int, int>> emptySpaces;
-
-    //cout << "Human::move()" << endl;
 
     //for every way humans can go, look to see if its open
     for (int direct = 0; direct < 4; direct++) {
@@ -52,13 +42,10 @@ vector<pair<int, int>> Human::findSpaces() {
         int nextY = directionOffsets[direct].second + y;
 
         if (nextX < 0 || nextX >= size || nextY < 0 || nextY >= size) {
-            // cout << "Human::move() was out of bounds" << endl;
-            // cout << "x: " << x << ", y: " << y << " Size: "<< size << endl;
             continue;
         }
         //if passed gate if continue:
         Organism *adjacentCell = city->getOrganism(nextX, nextY);
-        //cout << "Cell contents fetched" << endl;
         if (adjacentCell == nullptr) {
             emptySpaces.push_back( pair(nextX, nextY) );
         }
@@ -77,11 +64,8 @@ void Human::move() {
         city->setOrganism(nullptr, x, y);
         x = emptySpaces[0].first;
         y = emptySpaces[0].second;
-
     }
-    //cout << "Human move complete, turning state to off" << endl;
     this->moved = true;
-
 }
 
 void Human::recruit() {
