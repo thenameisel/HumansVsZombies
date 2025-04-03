@@ -3,6 +3,8 @@
 
 
 const int GRIDSIZE = 20; // size of the square grid
+const int BUILDING_COLLAPSE = 50; //how long till a building falls down
+const int BUILDING_STARTCOUNT = 10;
 const int HUMAN_STARTCOUNT = 100; // initial Humans (default 100)
 const int ZOMBIE_STARTCOUNT = 5; //initial Zombie count
 const int HUMAN_BREED = 3; // steps until an Human breeds
@@ -11,6 +13,7 @@ const int ZOMBIE_STARVE = 3; // steps until a Zombie starves and converts back
 const char HUMAN_CH = 72;//72 "H"// ascii for Human
 const char SPACE_CH = 45; // "-" ascii dash for empty elements
 const char ZOMBIE_CH = 90;//90 "Z"// ascii for zombie
+const char BUILDING_CH = 66; //"B" character for buildings
 const int INTERVAL = 300; // millisecond pause between city steps
 const int ITERATIONS = 1000; // max number of steps
 
@@ -28,6 +31,7 @@ const int ITERATIONS = 1000; // max number of steps
 const int HUMAN_COLOR = 3; // turquoise
 const int ZOMBIE_COLOR = 14; // bright yellow
 const int DASH_COLOR = 8; // pale white
+const int BUILDING_COLOR = 12;
 
 constexpr std::pair<int, int> directionOffsets[] = {
     {-1, 0}, // NORTH

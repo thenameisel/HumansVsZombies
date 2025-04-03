@@ -79,6 +79,12 @@ build CMakeFiles/HumansVsZombies.dir/Zombie.cpp.obj: CXX_COMPILER__HumansVsZombi
   OBJECT_DIR = CMakeFiles\HumansVsZombies.dir
   OBJECT_FILE_DIR = CMakeFiles\HumansVsZombies.dir
 
+build CMakeFiles/HumansVsZombies.dir/Building.cpp.obj: CXX_COMPILER__HumansVsZombies_unscanned_Debug C$:/Users/thena/OneDrive/school/PROG2100/Assignment4/HumansVsZombies/Building.cpp || cmake_object_order_depends_target_HumansVsZombies
+  DEP_FILE = CMakeFiles\HumansVsZombies.dir\Building.cpp.obj.d
+  FLAGS = -g -std=gnu++23 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\HumansVsZombies.dir
+  OBJECT_FILE_DIR = CMakeFiles\HumansVsZombies.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target HumansVsZombies
@@ -87,7 +93,7 @@ build CMakeFiles/HumansVsZombies.dir/Zombie.cpp.obj: CXX_COMPILER__HumansVsZombi
 #############################################
 # Link the executable HumansVsZombies.exe
 
-build HumansVsZombies.exe: CXX_EXECUTABLE_LINKER__HumansVsZombies_Debug CMakeFiles/HumansVsZombies.dir/main.cpp.obj CMakeFiles/HumansVsZombies.dir/City.cpp.obj CMakeFiles/HumansVsZombies.dir/Human.cpp.obj CMakeFiles/HumansVsZombies.dir/Organism.cpp.obj CMakeFiles/HumansVsZombies.dir/Zombie.cpp.obj
+build HumansVsZombies.exe: CXX_EXECUTABLE_LINKER__HumansVsZombies_Debug CMakeFiles/HumansVsZombies.dir/main.cpp.obj CMakeFiles/HumansVsZombies.dir/City.cpp.obj CMakeFiles/HumansVsZombies.dir/Human.cpp.obj CMakeFiles/HumansVsZombies.dir/Organism.cpp.obj CMakeFiles/HumansVsZombies.dir/Zombie.cpp.obj CMakeFiles/HumansVsZombies.dir/Building.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\HumansVsZombies.dir

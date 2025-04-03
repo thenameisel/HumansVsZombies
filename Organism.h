@@ -21,7 +21,6 @@ protected:
 public:
 	Organism();
 	Organism( City *city, int size, int row, int col);
-	//virtual string getColoredSymbol() const = 0;
 	virtual ~Organism() = default;
 	virtual void turn() = 0;
 	virtual vector<pair<int, int>> findSpaces() =0;

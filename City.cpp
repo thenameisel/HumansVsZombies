@@ -12,6 +12,7 @@
 #undef byte
 #include <conio.h>
 
+#include "Building.h"
 #include "Human.h"
 #include "Organism.h"
 #include "Zombie.h"
@@ -41,12 +42,22 @@ City::City() {
     }
 
     //populate Zombies on the board
-    for (int human = 0; human < ZOMBIE_STARTCOUNT;) {
+    for (int zombie = 0; zombie < ZOMBIE_STARTCOUNT;) {
         int row = rd() % GRIDSIZE;
         int col = rd() % GRIDSIZE;
         if (grid[row][col] == nullptr ) {
             grid[row][col] = new Zombie(this, GRIDSIZE, row, col);
-            human++;
+            zombie++;
+        }
+    }
+
+    //populate Buildings on the board
+    for (int building = 0; building < BUILDING_STARTCOUNT;) {
+        int row = rd() % GRIDSIZE;
+        int col = rd() % GRIDSIZE;
+        if (grid[row][col] == nullptr ) {
+            grid[row][col] = new Building(this, GRIDSIZE, row, col);
+            building++;
         }
     }
 
@@ -167,6 +178,8 @@ ostream& operator<<( ostream &output, City &city ) {
                     SetConsoleTextAttribute(hConsole, ZOMBIE_COLOR);
                 } else if (currentType == HUMAN_CH) {
                     SetConsoleTextAttribute(hConsole, HUMAN_COLOR);
+                } else if (currentType == BUILDING_CH) {
+                    SetConsoleTextAttribute(hConsole, BUILDING_COLOR);
                 }
                 output << currentType;
                 SetConsoleTextAttribute(hConsole, originalInfo.wAttributes);

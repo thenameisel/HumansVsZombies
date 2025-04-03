@@ -4,12 +4,11 @@
 
 #include "City.h"
 #include "Human.h"
-
+#include "Organism.h"
 #include <vector>
 #include <random>
 #include <algorithm>
 
-#include "Organism.h"
 
 using namespace std;
 //default constructor
@@ -79,7 +78,6 @@ void Human::recruit() {
             shuffle(emptySpaces.begin(), emptySpaces.end(), gen);
             Organism *newHuman = new Human(city, size,emptySpaces[0].first, emptySpaces[0].second);
             city->setOrganism(newHuman, emptySpaces[0].first, emptySpaces[0].second);
-
         }
         //reset the timer
         recruitTimer = 0;

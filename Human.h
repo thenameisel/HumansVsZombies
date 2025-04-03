@@ -6,7 +6,7 @@
 
 class Human : public Organism
 {
-	protected:
+protected:
 	int recruitTimer = 0;
 public:
 	Human(); 

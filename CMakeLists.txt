@@ -7,4 +7,6 @@ add_executable(HumansVsZombies main.cpp
         City.cpp
         Human.cpp
         Organism.cpp
-        Zombie.cpp)
+        Zombie.cpp
+        Building.cpp
+        Building.h)
