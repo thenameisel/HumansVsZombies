@@ -3,17 +3,18 @@
 
 
 const int GRIDSIZE = 20; // size of the square grid
-const int BUILDING_COLLAPSE = 50; //how long till a building falls down
-const int BUILDING_STARTCOUNT = 10;
+const int BUILDING_COLLAPSE = 8; //how long till a building falls down. buildings start at 5. grow if they are 'repaired' down to 0
+const int BUILDING_STARTCOUNT = 15;
 const int HUMAN_STARTCOUNT = 100; // initial Humans (default 100)
 const int ZOMBIE_STARTCOUNT = 5; //initial Zombie count
-const int HUMAN_BREED = 3; // steps until an Human breeds
+const int HUMAN_BREED = 6; // steps until an Human breeds
 const int ZOMBIE_BREED = 8; // steps until an Zombie breeds
-const int ZOMBIE_STARVE = 3; // steps until a Zombie starves and converts back
+const int ZOMBIE_STARVE = 5; // steps until a Zombie starves and converts back
 const char HUMAN_CH = 72;//72 "H"// ascii for Human
 const char SPACE_CH = 45; // "-" ascii dash for empty elements
 const char ZOMBIE_CH = 90;//90 "Z"// ascii for zombie
 const char BUILDING_CH = 66; //"B" character for buildings
+const int HUMAN_LEAVE_CHANCE = 2; //for chance they will leave a building. higher = lower chance
 const int INTERVAL = 300; // millisecond pause between city steps
 const int ITERATIONS = 1000; // max number of steps
 

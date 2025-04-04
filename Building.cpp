@@ -6,6 +6,7 @@
 #include <vector>
 #include <algorithm>
 
+#include "Human.h"
 #include "Organism.h"
 
 using namespace std;
@@ -17,6 +18,29 @@ Building::Building() : Organism() {
 Building::Building(City *city, int size, int row, int col) : Organism(city, size, row, col) {
     type = BUILDING_CH;
     cout << "Building created!" << endl;
+}
+
+bool Building::getOccupied() {
+    return occupied;
+}
+
+//Human leaves building
+void Building::leaveBuilding( int x, int y ) {
+    city->setOrganism(humanOccupant, x, y);
+    if (Human* human = dynamic_cast<Human*>(humanOccupant)) {
+        human->setPosition(x, y);
+    }
+    humanOccupant = nullptr;
+    occupied = false;
+    buildingDecay = 5;
+    cout << "Human left building!" << endl;
+}
+
+//set Organism into the building
+void Building::enterBuilding( Organism *organism, int x, int y ) {
+    humanOccupant = organism;
+    occupied = true;
+    cout << "Human entered building!" << endl;
 }
 
 vector<pair<int, int>> Building::findSpaces() {
@@ -43,15 +67,33 @@ void Building::turn() {
     //if unoccupied, buildingDecay goes up. if occupied it goes down.
     //if it gets to BUILDING_COLLAPSE, it is deleted.
     this->state();
+    //if occupied there's a chance the human will leave
+    if (occupied){this->humanMovement();}
 }
 
 void Building::state() {
     if (occupied) {buildingDecay--;} else {buildingDecay++;}
 
     if (buildingDecay >= BUILDING_COLLAPSE) {
+        cout << "Building collapsed!" << endl;
         city->removeOrganism(x,y);
     } else if (buildingDecay <= 0) {
         this->grow();
+    }
+}
+
+void Building::humanMovement() {
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<int> dist(0, HUMAN_LEAVE_CHANCE);
+    int randomValue = dist(gen);
+
+    if (randomValue == 0) {
+        vector<pair<int, int>> emptySpaces = findSpaces();
+        shuffle(emptySpaces.begin(), emptySpaces.end(), gen);
+        if (!emptySpaces.empty()) {
+            leaveBuilding(emptySpaces[0].first,emptySpaces[0].second);
+        }
     }
 }
 

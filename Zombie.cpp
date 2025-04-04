@@ -66,7 +66,7 @@ vector<pair<int, int>> Zombie::findFood() {
 
         //if passed gate if continue:
         Organism *adjacentCell = city->getOrganism(nextX, nextY);
-        if (adjacentCell != nullptr && adjacentCell->getType() != ZOMBIE_CH) {
+        if (adjacentCell != nullptr && adjacentCell->getType() != ZOMBIE_CH && adjacentCell->getType() != BUILDING_CH) {
             foodSpaces.push_back( pair(nextX, nextY) );
         }
     }

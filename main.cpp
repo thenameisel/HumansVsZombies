@@ -32,6 +32,7 @@ int main() {
         cout << "GENERATION " << city->getGeneration() << endl;
         cout << "HUMANS: " << city->countType(HUMAN_CH) << endl;
         cout << "ZOMBIES: " << city->countType(ZOMBIE_CH) << endl;
+        cout << "BUILDINGS: " << city->countType(BUILDING_CH) << endl;
     }
 
     cout << "There has been an ELE!" << endl;

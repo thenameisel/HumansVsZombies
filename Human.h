@@ -16,8 +16,13 @@ public:
 	void turn(); //all things a human may do on their turn. i.e. a move, and if allowed a recruitment
 
 	vector<pair<int, int>> findSpaces();
+
+	vector<pair<int, int>> findEmptySpaces();
+
 	void move();
 	void recruit();
+
+	void setPosition(int x, int y);
 };
 
 #endif

@@ -109,6 +109,7 @@ void City::removeOrganism( int x, int y ) {
         for (int j = 0; j < GRIDSIZE; j++) {
             if ((i != x || j != y) && grid[i][j] == grid[x][y]) {
                 cout << "ERROR: Duplicate pointer at (" << i << "," << j << ")" << endl;
+                cout << "ERROR: Original pointer at (" << x << "," << y << ")" << endl;
                 return; // Don't delete - object exists elsewhere
             }
         }
